@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhyming Words</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+        }
+        h1 {
+            color: #333;
+        }
+        .logo {
+            width: 100px;
+            margin-top: 20px;
+        }
+        .word {
+            font-size: 24px;
+            margin: 20px;
+            color: #555;
+            display: inline-block;
+        }
+        .rhymes-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+        .rhyme-option {
+            margin: 10px;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #e7f3fe;
+            cursor: pointer;
+        }
+        .rhyme-option:hover {
+            background-color: #cce5ff;
+        }
+        .feedback {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .more-lessons-btn {
+            margin-top: 80px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .more-lessons-btn:hover {
+            background-color: #218838;
+        }
+        .instructions {
+            font-size: 16px;
+            margin: 20px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Logo -->
+<img src="https://i.imgur.com/mwpTHJj.png" class="logo" alt="Logo">
+
+<h1>Rhyming Words</h1>
+
+<!-- Instructions -->
+<div class="instructions">
+    <p>Click on the word that rhymes with the target word.</p>
+</div>
+
+<!-- Target word -->
+<div class="word" id="targetWord"></div>
+
+<!-- Rhymes options -->
+<div class="rhymes-container" id="rhymesContainer"></div>
+
+<!-- Feedback message -->
+<div class="feedback" id="feedbackMessage"></div>
+
+<!-- "More Lessons" button -->
+<a href="https://sites.google.com/view/grades-1/home" class="more-lessons-btn">More Lessons</a>
+
+<!-- JavaScript -->
+<script>
+    const targetWordElement = document.getElementById('targetWord');
+    const rhymesContainer = document.getElementById('rhymesContainer');
+    const feedbackMessage = document.getElementById('feedbackMessage');
+
+    // Pre-set list of words and their rhymes
+    const wordsAndRhymes = [
+        { word: "cat", rhymes: ["hat", "dog", "bat"] }, // Correct rhyme is "hat"
+        { word: "dog", rhymes: ["log", "cat", "frog"] }, // Correct rhyme is "log"
+        { word: "sun", rhymes: ["fun", "car", "run"] }, // Correct rhyme is "fun"
+        { word: "tree", rhymes: ["bee", "star", "sea"] }, // Correct rhyme is "bee"
+        { word: "bat", rhymes: ["hat", "dog", "rat"] }, // Correct rhyme is "hat"
+        { word: "fish", rhymes: ["dish", "cat", "wish"] }, // Correct rhyme is "dish"
+        { word: "rain", rhymes: ["pain", "car", "train"] }, // Correct rhyme is "pain"
+        { word: "ball", rhymes: ["call", "house", "tree"] }, // Correct rhyme is "call"
+        { word: "star", rhymes: ["car", "far", "bar"] }, // Correct rhyme is "far"
+        { word: "mouse", rhymes: ["house", "cat", "car"] } // Correct rhyme is "house"
+    ];
+
+    let currentWordIndex = 0; // Track the current word
+
+    // Function to setup a new rhyming words exercise
+    function setupExercise() {
+        feedbackMessage.innerText = '';
+        rhymesContainer.innerHTML = '';
+
+        if (currentWordIndex < wordsAndRhymes.length) {
+            const currentItem = wordsAndRhymes[currentWordIndex];
+            targetWordElement.innerText = currentItem.word;
+
+            // Randomize options, including only one correct rhyme and two distractors
+            const correctRhyme = currentItem.rhymes[0]; // First item as correct rhyme
+            const distractor1 = currentItem.rhymes[1]; // Second item as first distractor
+            const distractor2 = currentItem.rhymes[2]; // Third item as second distractor
+            const options = [correctRhyme, distractor1, distractor2].sort(() => Math.random() - 0.5); // Combine and shuffle
+
+            options.forEach(option => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('rhyme-option');
+                optionElement.innerText = option;
+                optionElement.onclick = () => checkRhyme(option, correctRhyme);
+                rhymesContainer.appendChild(optionElement);
+            });
+        } else {
+            feedbackMessage.innerText = "Congratulations! You've completed all the rhyming words.";
+        }
+    }
+
+    // Function to check if the selected word rhymes
+    function checkRhyme(selectedWord, correctRhyme) {
+        if (selectedWord === correctRhyme) {
+            feedbackMessage.innerText = "Correct! That's a rhyme.";
+            feedbackMessage.style.color = "green";
+            currentWordIndex++; // Move to the next word
+            setTimeout(setupExercise, 2000); // Setup the next exercise after 2 seconds
+        } else {
+            feedbackMessage.innerText = "Not quite! Try again.";
+            feedbackMessage.style.color = "red";
+        }
+    }
+
+    // Start the exercise
+    setupExercise();
+</script>
+
+</body>
+</html>
